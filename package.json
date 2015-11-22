@@ -1,0 +1,29 @@
+{
+  "name": "mongo-xlsx",
+  "version": "1.0.0",
+  "description": "Convert Mongo data into Excel and vice versa.",
+  "main": "lib/mongo-xlsx.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Moblox/mongo-xlsx.git"
+  },
+  "keywords": [
+    "mongo",
+    "xlsx",
+    "convert",
+    "excel",
+    "mongoose"
+  ],
+  "author": "Edward Alvarado <edward@moblox.io> (http://moblox.io)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Moblox/mongo-xlsx/issues"
+  },
+  "homepage": "https://github.com/Moblox/mongo-xlsx#readme"
+}

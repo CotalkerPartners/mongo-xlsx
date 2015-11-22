@@ -1,0 +1,17 @@
+[
+  {
+    "name": "edward"
+  },
+  {
+    "lastName": "alvarado"
+  },
+  {
+    "email": "fake@mail.com"
+  },
+  {
+    "age": 29
+  },
+  {
+    "empty": null
+  }
+]
