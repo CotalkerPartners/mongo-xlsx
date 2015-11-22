@@ -1,6 +1,6 @@
 {
   "name": "mongo-xlsx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convert Mongo data into Excel and vice versa.",
   "main": "lib/mongo-xlsx.js",
   "directories": {
