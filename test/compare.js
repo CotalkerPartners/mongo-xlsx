@@ -1,5 +1,5 @@
 exports.deepCompare = function(a, b) {
-  var i, l;
+  //var i, l;
   var leftChain = [];
   var rightChain = [];
   var p;
@@ -27,7 +27,9 @@ exports.deepCompare = function(a, b) {
       (x instanceof String && y instanceof String) ||
       (x instanceof Number && y instanceof Number)) {
       var status = x.toString() === y.toString();
-      if (!status) console.log("ERROR", status, x, y);
+      if (!status) {
+        console.log("ERROR", status, x, y);
+      }
       return status;
     }
 
