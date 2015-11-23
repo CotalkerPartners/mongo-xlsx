@@ -5,8 +5,9 @@ exports.deepCompare = function(a, b) {
   var leftChain = [];
   var rightChain = [];
   var p;
-
   function compare2Objects(x, y) {
+    //console.log("COMPARING: ", JSON.stringify(x), JSON.stringify(y));
+
     // remember that NaN === NaN returns false
     // and isNaN(undefined) returns true
     if (isNaN(x) && isNaN(y) && typeof x === 'number' && typeof y === 'number') {
@@ -123,7 +124,8 @@ exports.deepCompare = function(a, b) {
 
         default:
           if (x[p] !== y[p]) {
-            console.log("ERROR", "chain", x, x[p], y[p], p);
+            //[ 'hello', 'world', t: 's' ] s undefined t
+            console.log("ERROR", "chain", JSON.stringify(x), x[p], y[p], p);
             return false;
           }
           break;
@@ -138,20 +140,25 @@ exports.deepCompare = function(a, b) {
 var hasOwnPropertyProtype = Object.prototype.hasOwnProperty;
 
 function isEmpty(obj) {
-
-  // null and undefined are "empty"
-  if (obj == null) return true;
-
-  // Assume if it has a length property with a non-zero value
-  // that that property is correct.
-  if (obj.length > 0)    return false;
-  if (obj.length === 0)  return true;
-
-  // Otherwise, does it have any properties of its own?
-  // Note that this doesn't handle
-  // toString and valueOf enumeration bugs in IE < 9
+  if (!obj) {
+    return true;
+  }
+  if (obj.length > 0) {
+    for(var i = 0; i < obj.length; i++) {
+      if (!isEmpty(obj[i])) {
+        return false;
+      }
+    }
+  }
+  if (obj.length === 0) {
+    return true;
+  }
   for (var key in obj) {
-    if (hasOwnPropertyProtype.call(obj, key)) return false;
+    if (hasOwnPropertyProtype.call(obj, key)) {
+      if (!isEmpty(obj[key])) {
+        return false;
+      }
+    }
   }
 
   return true;

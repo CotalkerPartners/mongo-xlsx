@@ -1,1 +1,3 @@
 test/input/user-private-test.json
+test/output/*
+test/outputxlsx/*

@@ -34,9 +34,20 @@ var files = fs.readdirSync(INPUT_PATH);
 console.log(files, typeof files);
 
 var processFile = function(file) {
-
+  if (file.match("private")) {
+    return;
+  }
   {
-    var json1 = JSON.parse(fs.readFileSync(INPUT_PATH + "/" + file, 'utf8'));
+    var json1;
+
+    if (file.match("\.json")) {
+      json1 = JSON.parse(fs.readFileSync(INPUT_PATH + "/" + file, 'utf8'));
+    } else if (file.match("\.js")) {
+      json1 = require("./" + INPUT_PATH + "/" + file).anObject();
+    } else {
+      console.log("Unknown test format");
+      return;
+    }
     var model = mongoxlsx.buildDynamicModel(json1);
     var excel = mongoxlsx.mongoData2XlsxData(json1, model);
     var json = mongoxlsx.xlsxData2MongoData(excel, model);
@@ -46,11 +57,18 @@ var processFile = function(file) {
     }
   }
   {
-    var json1Xlsx = JSON.parse(fs.readFileSync(INPUT_PATH + "/" + file, 'utf8'));
+    var json1Xlsx;
+    if (file.match("\.json")) {
+      json1Xlsx = JSON.parse(fs.readFileSync(INPUT_PATH + "/" + file, 'utf8'));
+    } else if (file.match("\.js")) {
+      json1Xlsx = require("./" + INPUT_PATH + "/" + file).anObject();
+    } else {
+      console.log("Unknown test format");
+      return;
+    }
     var modelXlsx = mongoxlsx.buildDynamicModel(json1Xlsx);
     mongoxlsx.mongoData2Xlsx(json1Xlsx, modelXlsx, {fileName:file + ".xlsx", path:OUTPUT_XLSX_PATH}, function(err, data) {
       mongoxlsx.xlsx2MongoData(data.fullPath, modelXlsx, function(err, jsonXlsx) {
-        ///console.log("RESULT", err, jsonXlsx);
         for (var i = 0; i < json1Xlsx.length; i += 1) {
           console.log("COMPARING XLSX ", file, "[",i,"]", compare.deepCompare(json1Xlsx[i], jsonXlsx[i]));
         }

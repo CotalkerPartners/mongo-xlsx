@@ -42,19 +42,37 @@ mongoxlsx.xlsx2MongoData("./file.xlsx", model, function(err, mongoData) {
 
 ## Roadmap
 
-- Read from the modelMap while converting from excel to json
+- Fix test system & add more complex tests
+- Allow to read Excel without model
+- Read from the modelMap while converting from excel to json (allow custom headers on excel)
+- Allow to filter fields with model
+- Fix performance issues
+- Fix date objects
 
 ## Known Limitations:
 
-Not using modelMap to convert from excel to json
+1. Not using modelMap to convert from excel to json
+2. Doesn' soport mixed types
 
-Nested objects "first" element element may not be a numeric or string-numeric:
+e.g. (error1_test.json is passing but their may be unknown side effects) 
+```json
+[{"a":1},{"a":["hello","world"]},{"a":{"b":true,"c":false}}]
+```
+
+3. Nested objects "first" element element may not be a numeric or string-numeric:
 (ECMA-262 does not specify enumeration order. The de facto standard is to match insertion order.)
 
 e.g., 
+```json
   {
     "0" : "Hello",
     "a" : "world"
   }
+```
 
+4. Very Slow :'(
+Some Performance Issues @ JSON.parse(JSON.stringify(x)) to make a copy and not modify original data (error1_test.json)
 
+5. nulls, empty cells, undefined may not be mixed 
+
+6. Javascript date objects are yet not implemented.

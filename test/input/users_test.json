@@ -20,7 +20,10 @@
     "registered": "Saturday, August 16, 2014 11:49 AM",
     "latitude": "-40.809188",
     "longitude": "86.597699",
-    "tags": [
+    "tags": [{
+      "nombre":"Aldo",
+      "zocio": 123
+      },
       7,
       "dolor",
       "exists",
@@ -74,6 +77,10 @@
     "latitude": "16.662555",
     "longitude": "151.338923",
     "tags": [
+      {
+        "nombre":"Aldo",
+        "zocio": 123
+      },
       7,
       "dolor",
       "exists",
@@ -127,6 +134,10 @@
     "latitude": "-30.18041",
     "longitude": "159.518747",
     "tags": [
+      {
+        "nombre":"Aldo",
+        "zocio": 123
+      },
       7,
       "dolor",
       "exists",
@@ -179,6 +190,10 @@
     "latitude": "35.323759",
     "longitude": "161.646215",
     "tags": [
+      {
+        "nombre":"Aldo",
+        "zocio": 123
+      },
       7,
       "dolor",
       "exists",
@@ -232,6 +247,10 @@
     "latitude": "60.927434",
     "longitude": "-25.386639",
     "tags": [
+      {
+        "nombre":"Aldo",
+        "zocio": 123
+      },
       7,
       "dolor",
       "exists",
