@@ -1,3 +1,5 @@
+'use strict';
+
 exports.deepCompare = function(a, b) {
   //var i, l;
   var leftChain = [];
@@ -35,8 +37,17 @@ exports.deepCompare = function(a, b) {
 
     // At last checking prototypes as good a we can
     if (!(x instanceof Object && y instanceof Object)) {
-      console.log("ERROR", "instanceof", x, y);
-      return false;
+
+      // NOTE We allow null=={} due to excel parsing of empty rows...
+      var bothEmpty = (isEmpty(y) && isEmpty(x));
+      if (!bothEmpty) {
+        console.log("ERROR", "instanceof", x, y);
+        return false;
+      } else {
+        if (x === null || y === null || (typeof x === 'undefined') || (typeof y === 'undefined')) {
+          return true; // this will crash later on...
+        }
+      }
     }
 
     if (x.isPrototypeOf(y) || y.isPrototypeOf(x)) {
@@ -81,9 +92,12 @@ exports.deepCompare = function(a, b) {
 
     for (p in x) {
       if (y.hasOwnProperty(p) !== x.hasOwnProperty(p)) {
-        console.log("ERROR", "hasOwnProperty2", x, y, p);
-
-        return false;
+        // due to nulls on excels and nulls != empty rows...
+        var bothEmpty = (isEmpty(y.p) && isEmpty(x.p));
+        if (!bothEmpty) {
+          console.log("ERROR", "hasOwnProperty2", x, y, p);
+          return false;
+        }
       }
       else if (typeof y[p] !== typeof x[p]) {
         console.log("ERROR", "typeof2", x[p], y[p], p);
@@ -99,7 +113,7 @@ exports.deepCompare = function(a, b) {
           rightChain.push(y);
 
           if (!compare2Objects(x[p], y[p])) {
-            console.log("ERROR", "recursive", x[p], y[p], p);
+            console.log("ERROR", "recursive", x, x[p], y[p], p);
             return false;
           }
 
@@ -109,7 +123,7 @@ exports.deepCompare = function(a, b) {
 
         default:
           if (x[p] !== y[p]) {
-            console.log("ERROR", "chain", x[p], y[p], p);
+            console.log("ERROR", "chain", x, x[p], y[p], p);
             return false;
           }
           break;
@@ -120,3 +134,25 @@ exports.deepCompare = function(a, b) {
 
   return compare2Objects(a, b);
 };
+
+var hasOwnPropertyProtype = Object.prototype.hasOwnProperty;
+
+function isEmpty(obj) {
+
+  // null and undefined are "empty"
+  if (obj == null) return true;
+
+  // Assume if it has a length property with a non-zero value
+  // that that property is correct.
+  if (obj.length > 0)    return false;
+  if (obj.length === 0)  return true;
+
+  // Otherwise, does it have any properties of its own?
+  // Note that this doesn't handle
+  // toString and valueOf enumeration bugs in IE < 9
+  for (var key in obj) {
+    if (hasOwnPropertyProtype.call(obj, key)) return false;
+  }
+
+  return true;
+}

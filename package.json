@@ -1,6 +1,6 @@
 {
   "name": "mongo-xlsx",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Convert Mongo data into Excel and vice versa.",
   "main": "lib/mongo-xlsx.js",
   "directories": {
@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/Moblox/mongo-xlsx/issues"
   },
-  "homepage": "https://github.com/Moblox/mongo-xlsx#readme"
+  "homepage": "https://github.com/Moblox/mongo-xlsx#readme",
+  "dependencies": {
+    "node-xlsx": "https://github.com/Moblox/node-xlsx.git"
+  }
 }

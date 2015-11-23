@@ -1,33 +1,38 @@
 # mongo-xlsx
 
+IMPORTANT: Pre-ALPHA quality.
+
 Mongo-xlsx is a utility module which provides tools to converts excels into data for mongoDB
 
-## Quick Examples
-
-```javascript
+The general conversion flow:
 
 ```
+MongoDB   -> (extract data with mongoose.find)  -> MongoData -> (convert with mongoData2Xlsx)        -> file.xlsx
+file.xlsx -> (convert data with xlsx2MongoData) -> MongoData -> (save to MongoDB with mongoose.save) -> MongoDB
+```
 
-## Mongo (w/Mongoose) Example 
+## Quick Examples 
 
 ```javascript
-
-var mongoose = require('mongoose');
 var mongoXlsx = require('mongo-xlsx');
 
 var data = [ { name : "Peter", lastName : "Parker", isSpider : true } , 
              { name : "Remy",  lastName : "LeBeau", powers : ["kinetic cards"] }];
 
-/* Generate automatic model for processing (A manual model may be used!) */
+/* Generate automatic model for processing (A static model should be used) */
 var model = mongoXlsx.buildDynamicModel(data);
 
-/* Generate data for excel */
-var excel = mongoXlsx.mongoToExcel(data, model);
+/* Generate Excel */
+mongoxlsx.mongoData2Xlsx(json1Xlsx, model, function(err, data) {
+  console.log('File saved at:', data.fullPath); 
+});
+```
 
-
-
-var json = mongoxlsx.excelToMongo(excel, model);
-
+```javascript
+/* Read Excel */
+mongoxlsx.xlsx2MongoData("./file.xlsx", model, function(err, mongoData) {
+  console.log('Mongo data:', mongoData); 
+});
 ```
 
 
