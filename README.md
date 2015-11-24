@@ -2,9 +2,10 @@
 
 IMPORTANT: Pre-ALPHA quality.
 
-Mongo-xlsx is a utility module which provides tools to converts excels into data for mongoDB
+mongo-xlsx is a node.js utility module which provides tools that convert excel spreadsheets into/from MongoDB data.
+(MongoDB data -> Array of JSONs)
 
-The general conversion flow:
+The general data conversion flow:
 
 ```
 MongoDB   -> (extract data with mongoose.find)  -> MongoData -> (convert with mongoData2Xlsx)        -> file.xlsx
@@ -37,10 +38,35 @@ mongoxlsx.xlsx2MongoData("./file.xlsx", model, function(err, mongoData) {
 });
 ```
 
-
-## instalation
+## Instalation
 
 `npm install mongo-xlsx`
+
+## Testing
+
+node test
+
+## Documentation
+
+### buildDynamicModel(mongoData)
+Generates a model for converting into/from Excel/MongoData.
+This can be used to create a static conversion model.
+
+### mongoData2Xlsx(monogData, mongoModel, [options], callback)
+Converts MongoData into a Excel File
+
+### mongoData2XlsxData(mongoData, mongoModel)
+Converts MongoData into Excel Data to allow merging into single Excel File
+
+### xlsx2MongoData(path, mongoModel, [options], callback)
+Converts Excel File into Mongo Data.
+If mongoModel is null trys to use the file's header to build the JSON
+Otherwise the mongoModel map will be used to build the JSON
+
+### xlsxData2MongoData(excelData, mongoModel)
+Converts Excel Data into Mongo Data.
+If mongoModel is null trys to use the file's header to build the JSON
+Otherwise the mongoModel map will be used to build the JSON
 
 ## Roadmap
 
@@ -50,8 +76,10 @@ mongoxlsx.xlsx2MongoData("./file.xlsx", model, function(err, mongoData) {
 - Allow to filter fields with model
 - Fix performance issues
 - Fix date objects (Fixed: test@ test_time.js but test are more lax)
+- Add model examples and tests
+- Allow to merge múltiple ExcelData into a single SpreadSheet w/multiple sheets.
 
-## Known Limitations:
+## Known Limitations
 
 1. Not using modelMap to convert from excel to json
 2. May not work well with mixed types for the same key
@@ -75,4 +103,4 @@ e.g.,
 4. Very Slow :'(
 Some Performance Issues @ JSON.parse(JSON.stringify(x)) to make a copy and not modify original data (error1_test.json)
 
-5. nulls, empty cells, undefined may not be mixed 
+5. nulls, empty cells, undefined hell 
