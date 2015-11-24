@@ -58,8 +58,12 @@ exports.deepCompare = function(a, b) {
     }
 
     if (x.constructor !== y.constructor) {
+      if (x instanceof Date || y instanceof Date) {
+        // TODO
+        // This temporal workaround is to allow dates that are represented as json objects.
+        return true;
+      }
       console.log("ERROR", "constructor", x, y);
-
       return false;
     }
 
@@ -85,6 +89,13 @@ exports.deepCompare = function(a, b) {
         return false;
       }
       else if (typeof y[p] !== typeof x[p]) {
+
+        if (x[p] instanceof Date || x[p] instanceof Date) {
+          // TODO
+          // This temporal workaround is to allow dates that are represented as json objects.
+          return true;
+        }
+
         console.log("ERROR", "typeof1", x[p], y[p]);
 
         return false;
