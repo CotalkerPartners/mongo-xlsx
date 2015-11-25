@@ -154,20 +154,25 @@ function isEmpty(obj) {
   if (!obj) {
     return true;
   }
-  if (obj.length > 0) {
-    for(var i = 0; i < obj.length; i++) {
-      if (!isEmpty(obj[i])) {
-        return false;
+  if (typeof obj === "object" && [].constructor == Array) {
+    if (obj.length > 0) {
+      for (var i = 0; i < obj.length; i++) {
+        if (!isEmpty(obj[i])) {
+          return false;
+        }
       }
     }
+    if (obj.length === 0) {
+      return true;
+    }
   }
-  if (obj.length === 0) {
-    return true;
-  }
-  for (var key in obj) {
-    if (hasOwnPropertyProtype.call(obj, key)) {
-      if (!isEmpty(obj[key])) {
-        return false;
+
+  if (typeof obj === "object" && [].constructor == Object) {
+    for (var key in obj) {
+      if (hasOwnPropertyProtype.call(obj, key)) {
+        if (!isEmpty(obj[key])) {
+          return false;
+        }
       }
     }
   }

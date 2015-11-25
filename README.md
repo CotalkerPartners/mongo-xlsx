@@ -44,47 +44,48 @@ mongoxlsx.xlsx2MongoData("./file.xlsx", model, function(err, mongoData) {
 
 ## Testing
 
-node test
+mocha
 
 ## Documentation
 
-### buildDynamicModel(mongoData)
-Generates a model for converting into/from Excel/MongoData.
+#### buildDynamicModel(mongoData)
+Generates a Model for converting into/from Excel/MongoData.
 This can be used to create a static conversion model.
 
-### mongoData2Xlsx(monogData, mongoModel, [options], callback)
+#### mongoData2Xlsx(monogData, mongoModel, [options], callback)
 Converts MongoData into a Excel File
 
-### mongoData2XlsxData(mongoData, mongoModel)
+#### mongoData2XlsxMultiPage(excelDataArray, sheetNamesArray, [options], callback)
+Converts an array of MongoData into a Excel file with multiple sheets
+
+#### mongoData2XlsxData(mongoData, mongoModel)
 Converts MongoData into Excel Data to allow merging into single Excel File
 
-### xlsx2MongoData(path, mongoModel, [options], callback)
+#### xlsx2MongoData(path, mongoModel, [options], callback)
 Converts Excel File into Mongo Data.
 If mongoModel is null trys to use the file's header to build the JSON
 Otherwise the mongoModel map will be used to build the JSON
 
-### xlsxData2MongoData(excelData, mongoModel)
+#### xlsxData2MongoData(excelData, mongoModel)
 Converts Excel Data into Mongo Data.
 If mongoModel is null trys to use the file's header to build the JSON
 Otherwise the mongoModel map will be used to build the JSON
 
 ## Roadmap
 
-- Fix test system & add more complex tests
 - Allow to read Excel without model
 - Read from the modelMap while converting from excel to json (allow custom headers on excel)
 - Allow to filter fields with model
 - Fix performance issues
 - Fix date objects (Fixed: test@ test_time.js but test are more lax)
-- Add model examples and tests
-- Allow to merge múltiple ExcelData into a single SpreadSheet w/multiple sheets.
+- Add Model examples and tests
 
 ## Known Limitations
 
 1. Not using modelMap to convert from excel to json
 2. May not work well with mixed types for the same key
 
-e.g. error1_test.json is passing but their may be unknown side effects. More test are needed 
+e.g. error1_test.json is passing but their may be unknown side effects. More test are still neededed.
 ```json
 [{"a":1},{"a":["hello","world"]},{"a":{"b":true,"c":false}}]
 ```
