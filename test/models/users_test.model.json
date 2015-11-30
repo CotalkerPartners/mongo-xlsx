@@ -1,0 +1,217 @@
+[
+  {
+    "displayName": "User Identifier",
+    "access": "_id",
+    "type": "string"
+  },
+  {
+    "displayName": "Main Index",
+    "access": "index",
+    "type": "number"
+  },
+  {
+    "displayName": "My GUID",
+    "access": "guid",
+    "type": "string"
+  },
+  {
+    "displayName": "Is User Active",
+    "access": "isActive",
+    "type": "boolean"
+  },
+  {
+    "displayName": "Balance",
+    "access": "balance",
+    "type": "string"
+  },
+  {
+    "displayName": "picture",
+    "access": "picture",
+    "type": "string"
+  },
+  {
+    "displayName": "age",
+    "access": "age",
+    "type": "number"
+  },
+  {
+    "displayName": "eyeColor",
+    "access": "eyeColor",
+    "type": "string"
+  },
+  {
+    "displayName": "First Name",
+    "access": "name[first]",
+    "type": "string"
+  },
+  {
+    "displayName": "Last Name",
+    "access": "name[last]",
+    "type": "string"
+  },
+  {
+    "displayName": "Company",
+    "access": "company",
+    "type": "string"
+  },
+  {
+    "displayName": "email",
+    "access": "email",
+    "type": "string"
+  },
+  {
+    "displayName": "phone",
+    "access": "phone",
+    "type": "string"
+  },
+  {
+    "displayName": "address",
+    "access": "address",
+    "type": "string"
+  },
+  {
+    "displayName": "about",
+    "access": "about",
+    "type": "string"
+  },
+  {
+    "displayName": "registered",
+    "access": "registered",
+    "type": "string"
+  },
+  {
+    "displayName": "latitude",
+    "access": "latitude",
+    "type": "string"
+  },
+  {
+    "displayName": "longitude",
+    "access": "longitude",
+    "type": "string"
+  },
+  {
+    "displayName": "tags[0][nombre]",
+    "access": "tags[0][nombre]",
+    "type": "string"
+  },
+  {
+    "displayName": "tags[0][zocio]",
+    "access": "tags[0][zocio]",
+    "type": "number"
+  },
+  {
+    "displayName": "tags[1]",
+    "access": "tags[1]",
+    "type": "number"
+  },
+  {
+    "displayName": "tags[2]",
+    "access": "tags[2]",
+    "type": "string"
+  },
+  {
+    "displayName": "tags[3]",
+    "access": "tags[3]",
+    "type": "string"
+  },
+  {
+    "displayName": "tags[4]",
+    "access": "tags[4]",
+    "type": "string"
+  },
+  {
+    "displayName": "tags[5]",
+    "access": "tags[5]",
+    "type": "string"
+  },
+  {
+    "displayName": "tags[6]",
+    "access": "tags[6]",
+    "type": "string"
+  },
+  {
+    "displayName": "tags[7]",
+    "access": "tags[7]",
+    "type": "object"
+  },
+  {
+    "displayName": "range[0]",
+    "access": "range[0]",
+    "type": "number"
+  },
+  {
+    "displayName": "range[1]",
+    "access": "range[1]",
+    "type": "number"
+  },
+  {
+    "displayName": "range[2]",
+    "access": "range[2]",
+    "type": "number"
+  },
+  {
+    "displayName": "range[3]",
+    "access": "range[3]",
+    "type": "number"
+  },
+  {
+    "displayName": "range[4]",
+    "access": "range[4]",
+    "type": "number"
+  },
+  {
+    "displayName": "range[5]",
+    "access": "range[5]",
+    "type": "number"
+  },
+  {
+    "displayName": "range[6]",
+    "access": "range[6]",
+    "type": "number"
+  },
+  {
+    "displayName": "range[7]",
+    "access": "range[7]",
+    "type": "number"
+  },
+  {
+    "displayName": "range[8]",
+    "access": "range[8]",
+    "type": "number"
+  },
+  {
+    "displayName": "range[9]",
+    "access": "range[9]",
+    "type": "number"
+  },
+  {
+    "displayName": "friends[0]",
+    "access": "friends[0]",
+    "type": "number"
+  },
+  {
+    "displayName": "friends[1][id]",
+    "access": "friends[1][id]",
+    "type": "number"
+  },
+  {
+    "displayName": "friends[1][name]",
+    "access": "friends[1][name]",
+    "type": "string"
+  },
+  {
+    "displayName": "isReal",
+    "access": "isReal",
+    "type": "boolean"
+  },
+  {
+    "displayName": "greeting",
+    "access": "greeting",
+    "type": "string"
+  },
+  {
+    "displayName": "favoriteFruit",
+    "access": "favoriteFruit",
+    "type": "string"
+  }
+]

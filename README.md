@@ -14,6 +14,12 @@ file.xlsx -> (convert data with xlsx2MongoData) -> MongoData -> (save to MongoDB
 
 ![alt tag](https://raw.github.com/moblox/mongo-xlsx/master/assets/sample.png)
 
+
+Custom headers for writing and reading excel files:
+
+![alt tag](https://raw.github.com/moblox/mongo-xlsx/master/assets/sample2.png)
+Just define a model! [Example](https://github.com/Moblox/mongo-xlsx/tree/master/test/models/users_test.model.json)
+
 ## Quick Examples 
 
 ```javascript
@@ -46,6 +52,48 @@ mongoxlsx.xlsx2MongoData("./file.xlsx", model, function(err, mongoData) {
 
 mocha
 
+## Models
+
+A model is used for converting Excel into Mongo data.
+The model allows, to have custom headers for writing and reading Excel files.
+
+```json
+[
+ {
+    "displayName": "User Identifier",
+    "access": "_id",
+    "type": "string"
+  },
+  {
+    "displayName": "Main Index",
+    "access": "index",
+    "type": "number"
+  }
+]
+```
+
+```
+displayName : Excel header name
+access : Object key
+type: Data Type 
+```
+
+A model can be automaticly build with:
+
+`buildDynamicModel(mongoData)`
+
+For example:
+
+`buildDynamicModel([{name:"eddie", age:40}, {name:"moe", age:19}, {name:"andrew", age:33} ])`
+
+gives:
+
+```
+[ { displayName: 'name', access: 'name', type: 'string' },
+  { displayName: 'age', access: 'age', type: 'number' } ]  
+```
+
+
 ## Documentation
 
 #### buildDynamicModel(mongoData)
@@ -73,12 +121,9 @@ Otherwise the mongoModel map will be used to build the JSON
 
 ## Roadmap
 
-- Allow to read Excel without model
-- Read from the modelMap while converting from excel to json (allow custom headers on excel)
-- Allow to filter fields with model
 - Fix performance issues
 - Fix date objects (Fixed: test@ test_time.js but test are more lax)
-- Add Model examples and tests
+- Add Model examples and tests (more model examples needed!)
 
 ## Known Limitations
 
