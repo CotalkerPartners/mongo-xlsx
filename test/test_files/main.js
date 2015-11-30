@@ -29,6 +29,7 @@ oldFiles.forEach(function(f) { fs.unlinkSync(OUTPUT_PATH+"/"+f); });
 oldXlsxFiles.forEach(function(f) { fs.unlinkSync(OUTPUT_XLSX_PATH+"/"+f); });
 
 var startTest = function() {
+
   var files = fs.readdirSync(INPUT_PATH);
   describe('mongo-xlsx', function() {
     files = files.filter(function(f) { return (!f.match("private"));});
@@ -100,67 +101,9 @@ var processFileIntoData = function(file) {
         };
       };
 
-      var customCompare = function(a, b) {
-        var akeys = a && a.constructor === Object ? Object.keys(a) : null;
-        var bkeys = b && b.constructor === Object ? Object.keys(b) : null;
-        var isArray = (a && a.constructor == Array) || (b && b.constructor === Array);
-
-
-        if ((akeys && akeys.length) || (bkeys && bkeys.length)) {
-          var keys = akeys.concat(bkeys).unique();
-          var isEqual = true;
-          for (var j = 0; j < keys.length; j++) {
-
-            //console.log(keys[j]);
-            //var empty1 = !a[keys[j]];
-            //var empty2 = !b[keys[j]];
-            //if ((a[keys[j]] && (a[keys[j]].constructor === Object || a[keys[j]].constructor === Array)) ||
-            //    (b[keys[j]] && (b[keys[j]].constructor === Object || b[keys[j]].constructor === Array))) {
-            //  empty1 = _.isEmpty(a[keys[j]], true);
-            //  empty2 = _.isEmpty(b[keys[j]], true);
-            //}
-            //
-            //if (empty1 && empty2) {
-            //  console.log("Skipping empty data", a[keys[j]], b[keys[j]]);
-            //} else
-            if (b[keys[j]] && b[keys[j]].z && b[keys[j]].z === 'd-mmm-yy') {
-              // TODO HOW TO CHECK EXCEL DATES?! { date: { t: 'n', z: 'd-mmm-yy', v: 42338.74626157407 } }
-              console.log("Skipping date lodash date check", a[keys[j]], b[keys[j]]);
-            } else {
-              var newIsEqual =  _.isEqual(a[keys[j]], b[keys[j]], customCompare);
-              if (!newIsEqual) {
-                console.log("NOT EQUAL 1");
-                console.log(a[keys[j]], b[keys[j]]);
-              }
-              isEqual = isEqual && newIsEqual;
-            }
-          }
-          return isEqual;
-        } else if (isArray) {
-          var max = Math.max(a ? a.length : 0 , b ? b.length : 0);
-          var allArrayObjectsAreEqual = true;
-          for (var m = 0; m < max; m++) {
-            var arrayIsEqual = _.isEqual(a[m], b[m], customCompare);
-            if (!arrayIsEqual) {
-              console.log("NOT EQUAL 2");
-              console.log(a, b);
-            }
-            allArrayObjectsAreEqual = allArrayObjectsAreEqual && arrayIsEqual;
-          }
-          return allArrayObjectsAreEqual;
-        } else {
-            var simpleIsEqual = _.isEqual(a, b);
-            if (!simpleIsEqual) {
-              console.log("NOT EQUAL 3");
-              console.log(a, b);
-            }
-            return simpleIsEqual;
-        }
-      };
-
       var m2 = function (i) {
         return function () {
-          var status = _.isEqual(json1[i], json[i], customCompare);
+          var status = _.isEqual(json1[i], json[i], compare.customCompare);
           assert.equal(true, status, file + "[" + i + "]");
         };
       };
@@ -292,11 +235,7 @@ var processAllTogether = function(files) {
         excelModels.push(model2Xlsx);
         next();
       }, function (err) {
-        if (err) {
-          assert.equal(true, false, err);
-          done(err);
-          return;
-        }
+        if (err) return done(err);
         mongoxlsx.mongoData2XlsxMultiPage(excelPageData, excelPageName, {path: OUTPUT_XLSX_PATH}, function (err, data) {
           if (err) return done(err);
           mongoxlsx.xlsx2MongoData(data.fullPath, excelModels, function (err, jsonXlsx, names) {
@@ -304,7 +243,9 @@ var processAllTogether = function(files) {
             for (var i = 0; i < jsonXlsx.length; i++) {
               for (var j = 0; j < jsonXlsx[i].length; j++) {
                 var status = compare.deepCompare(originalData[i][j], jsonXlsx[i][j]);
+                var status2 = compare.customCompare(originalData[i][j], jsonXlsx[i][j]);
                 assert.equal(true, status, names[i] + "[" + i + "][" + j + "]");
+                assert.equal(true, status2, names[i] + "[" + i + "][" + j + "]");
               }
             }
             done();

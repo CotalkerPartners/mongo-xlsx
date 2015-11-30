@@ -1,4 +1,5 @@
 'use strict';
+var _ = require('lodash');
 
 exports.deepCompare = function(a, b) {
   //var i, l;
@@ -179,3 +180,96 @@ function isEmpty(obj) {
 
   return true;
 }
+
+
+/*
+ * Provides a convenience extension to _.isEmpty which allows for
+ * determining an object as being empty based on either the default
+ * implementation or by evaluating each property to undefined, in
+ * which case the object is considered empty.
+ */
+_.mixin( function() {
+  // reference the original implementation
+  var _isEmpty = _.isEmpty;
+  return {
+    // If defined is true, and value is an object, object is considered
+    // to be empty if all properties are undefined, otherwise the default
+    // implementation is invoked.
+    isEmpty: function(value, defined) {
+      if (defined && _.isObject(value)) {
+        return !_.any( value, function(value, key) {
+          return value !== undefined && value !== null;
+        });
+      }
+      return _isEmpty(value);
+    }
+  }
+}());
+
+
+
+exports.customCompare = function(a, b) {
+
+
+  var isAEmpty = (a === null || a === undefined) || (a && (a.constructor === Object || a.constructor === Array) && _.isEmpty(a, true));
+  var isBEmpty = (b === null || b === undefined) || (b && (b.constructor === Object || b.constructor === Array) && _.isEmpty(b, true));
+  if (isAEmpty && isBEmpty) {
+    //console.log("EMPTY!");
+    //console.log(a,b);
+    return true;
+  }
+  if ((isAEmpty && !isBEmpty) || (!isAEmpty && isBEmpty)) {
+    console.log("SEMI ? EMPTY!");
+    console.log(a,b);
+  }
+
+
+  var akeys = a && a.constructor === Object ? Object.keys(a) : null;
+  var bkeys = b && b.constructor === Object ? Object.keys(b) : null;
+  var isArray = (a && a.constructor === Array) || (b && b.constructor === Array);
+
+
+  if ((akeys && akeys.length) || (bkeys && bkeys.length)) {
+    var keys = akeys.concat(bkeys).unique();
+    var isEqual = true;
+    for (var j = 0; j < keys.length; j++) {
+      if (b && b[keys[j]] && b[keys[j]].z && b[keys[j]].z === 'd-mmm-yy') {
+        // TODO HOW TO CHECK EXCEL DATES?! { date: { t: 'n', z: 'd-mmm-yy', v: 42338.74626157407 } }
+        console.log("Skipping date lodash date check", a[keys[j]], b[keys[j]]);
+      } else {
+        var newIsEqual =  _.isEqual(a[keys[j]], b[keys[j]], exports.customCompare);
+        if (!newIsEqual) {
+          console.log("NOT EQUAL 1");
+          console.log(a[keys[j]], b[keys[j]]);
+        }
+        isEqual = isEqual && newIsEqual;
+      }
+    }
+    return isEqual;
+  } else if (isArray) {
+    var max = Math.max(a ? a.length : 0 , b ? b.length : 0);
+    var allArrayObjectsAreEqual = true;
+    for (var m = 0; m < max; m++) {
+      var arrayIsEqual = _.isEqual(a[m], b[m], exports.customCompare);
+      if (!arrayIsEqual) {
+        console.log("NOT EQUAL 2");
+        console.log(a, b);
+      }
+      allArrayObjectsAreEqual = allArrayObjectsAreEqual && arrayIsEqual;
+    }
+    return allArrayObjectsAreEqual;
+  } else {
+    var simpleIsEqual = _.isEqual(a, b);
+    if (!simpleIsEqual) {
+      if (Date.parse(a) && typeof b === 'number') {
+        console.log("Workaround, looks like a js date / excel date", a, b);
+        simpleIsEqual = true;
+      } else {
+        console.log("NOT EQUAL 3");
+        console.log(a, b);
+      }
+    }
+
+    return simpleIsEqual;
+  }
+};
