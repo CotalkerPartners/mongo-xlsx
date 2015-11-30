@@ -124,6 +124,7 @@ Otherwise the mongoModel map will be used to build the JSON
 - Fix performance issues
 - Fix date objects (Fixed: test@ test_time.js but test are more lax)
 - Add Model examples and tests (more model examples needed!)
+- Add negative test so that we can check the custom-deep-comparators
 
 ## Known Limitations
 

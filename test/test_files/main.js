@@ -11,6 +11,7 @@ var fs = require('fs');
 var compare = require('./compare');
 var async = require('async');
 var path = require('path');
+var _ = require('lodash');
 
 /** PATHS FOR TESTING */
 var INPUT_PATH = './test/input';
@@ -31,11 +32,46 @@ var startTest = function() {
   var files = fs.readdirSync(INPUT_PATH);
   describe('mongo-xlsx', function() {
     files = files.filter(function(f) { return (!f.match("private"));});
-    //files = files.filter(function(f) { return (f.match("users_test"));});
+    //files = files.filter(function(f) { return (f.match("menu_test"));});
     files.forEach(processFileIntoData);
     files.forEach(processFileIntoFiles);
     processAllTogether(files);
   });
+};
+
+/*
+ * Provides a convenience extension to _.isEmpty which allows for
+ * determining an object as being empty based on either the default
+ * implementation or by evaluating each property to undefined, in
+ * which case the object is considered empty.
+ */
+//_.mixin( function() {
+//  // reference the original implementation
+//  var _isEmpty = _.isEmpty;
+//  return {
+//    // If defined is true, and value is an object, object is considered
+//    // to be empty if all properties are undefined, otherwise the default
+//    // implementation is invoked.
+//    isEmpty: function(value, defined) {
+//      if (defined && _.isObject(value)) {
+//        return !_.any( value, function(value, key) {
+//          return value !== undefined;
+//        });
+//      }
+//      return _isEmpty(value);
+//    }
+//  }
+//}());
+Array.prototype.unique = function() {
+  var a = this.concat();
+  for(var i=0; i<a.length; ++i) {
+    for(var j=i+1; j<a.length; ++j) {
+      if(a[i] === a[j]) {
+        a.splice(j--, 1);
+      }
+    }
+  }
+  return a;
 };
 
 
@@ -60,13 +96,78 @@ var processFileIntoData = function(file) {
 
       var m = function (i) {
         return function () {
-          var status = compare.deepCompare(json1[i], json[i]);
+          assert.equal(true, compare.deepCompare(json1[i], json[i]), file + "[" + i + "]");
+        };
+      };
+
+      var customCompare = function(a, b) {
+        var akeys = a && a.constructor === Object ? Object.keys(a) : null;
+        var bkeys = b && b.constructor === Object ? Object.keys(b) : null;
+        var isArray = (a && a.constructor == Array) || (b && b.constructor === Array);
+
+
+        if ((akeys && akeys.length) || (bkeys && bkeys.length)) {
+          var keys = akeys.concat(bkeys).unique();
+          var isEqual = true;
+          for (var j = 0; j < keys.length; j++) {
+
+            //console.log(keys[j]);
+            //var empty1 = !a[keys[j]];
+            //var empty2 = !b[keys[j]];
+            //if ((a[keys[j]] && (a[keys[j]].constructor === Object || a[keys[j]].constructor === Array)) ||
+            //    (b[keys[j]] && (b[keys[j]].constructor === Object || b[keys[j]].constructor === Array))) {
+            //  empty1 = _.isEmpty(a[keys[j]], true);
+            //  empty2 = _.isEmpty(b[keys[j]], true);
+            //}
+            //
+            //if (empty1 && empty2) {
+            //  console.log("Skipping empty data", a[keys[j]], b[keys[j]]);
+            //} else
+            if (b[keys[j]] && b[keys[j]].z && b[keys[j]].z === 'd-mmm-yy') {
+              // TODO HOW TO CHECK EXCEL DATES?! { date: { t: 'n', z: 'd-mmm-yy', v: 42338.74626157407 } }
+              console.log("Skipping date lodash date check", a[keys[j]], b[keys[j]]);
+            } else {
+              var newIsEqual =  _.isEqual(a[keys[j]], b[keys[j]], customCompare);
+              if (!newIsEqual) {
+                console.log("NOT EQUAL 1");
+                console.log(a[keys[j]], b[keys[j]]);
+              }
+              isEqual = isEqual && newIsEqual;
+            }
+          }
+          return isEqual;
+        } else if (isArray) {
+          var max = Math.max(a ? a.length : 0 , b ? b.length : 0);
+          var allArrayObjectsAreEqual = true;
+          for (var m = 0; m < max; m++) {
+            var arrayIsEqual = _.isEqual(a[m], b[m], customCompare);
+            if (!arrayIsEqual) {
+              console.log("NOT EQUAL 2");
+              console.log(a, b);
+            }
+            allArrayObjectsAreEqual = allArrayObjectsAreEqual && arrayIsEqual;
+          }
+          return allArrayObjectsAreEqual;
+        } else {
+            var simpleIsEqual = _.isEqual(a, b);
+            if (!simpleIsEqual) {
+              console.log("NOT EQUAL 3");
+              console.log(a, b);
+            }
+            return simpleIsEqual;
+        }
+      };
+
+      var m2 = function (i) {
+        return function () {
+          var status = _.isEqual(json1[i], json[i], customCompare);
           assert.equal(true, status, file + "[" + i + "]");
         };
       };
 
       for (var i = 0; i < json1.length; i += 1) {
-        it(file + "[" + i + "]", m(i));
+        it(file + "(custom compare) [" + i + "]", m(i));
+        it(file + "(lodash isEqual) [" + i + "]", m2(i));
       }
     }
 
