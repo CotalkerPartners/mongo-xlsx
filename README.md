@@ -32,7 +32,7 @@ var data = [ { name : "Peter", lastName : "Parker", isSpider : true } ,
 var model = mongoXlsx.buildDynamicModel(data);
 
 /* Generate Excel */
-mongoxlsx.mongoData2Xlsx(json1Xlsx, model, function(err, data) {
+mongoXlsx.mongoData2Xlsx(data, model, function(err, data) {
   console.log('File saved at:', data.fullPath); 
 });
 ```
