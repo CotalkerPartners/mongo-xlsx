@@ -39,7 +39,7 @@ mongoXlsx.mongoData2Xlsx(data, model, function(err, data) {
 
 ```javascript
 /* Read Excel */
-mongoxlsx.xlsx2MongoData("./file.xlsx", model, function(err, mongoData) {
+mongoXlsx.xlsx2MongoData("./file.xlsx", model, function(err, mongoData) {
   console.log('Mongo data:', mongoData); 
 });
 ```
