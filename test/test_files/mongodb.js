@@ -10,11 +10,10 @@ i7 @ 2.2 GHZ w/16GB
 */
 
 var mongoxlsx = require('../../lib/mongo-xlsx');
+
 // External
 var mongoose = require('mongoose');
 var async = require('async');
-// System
-var fs = require('fs');
 
 // Config DB
 mongoose.connect('mongodb://localhost/mongo-xlsx-test');
@@ -27,52 +26,51 @@ db.once('open', function() {
 
 var startTest = function() { 
 
-var simpleSchema = mongoose.Schema({
-    name: String,
-    lastname: String,
-    createdAt: { type: Date, default: Date.now },
-    age: Number
-});
-var SimpleModel = mongoose.model('SimpleTest', simpleSchema);
+  var simpleSchema = mongoose.Schema({
+      name: String,
+      lastname: String,
+      createdAt: { type: Date, default: Date.now },
+      age: Number
+  });
+  var SimpleModel = mongoose.model('SimpleTest', simpleSchema);
 
-var names = new Array(100000);
+  var names = new Array(100000);
 
-async.series([
-  function(next) {
-    SimpleModel.remove({}, next);
-  },
-  function(next) {
-    async.eachLimit(names, 1000, function(name, done) {
-      new SimpleModel({ name : 'abc', lastname : 'abc', age : 25  }).save(done);
-    }, next);
-  }],
-  function(err) {
+  async.series([
+    function(next) {
+      SimpleModel.remove({}, next);
+    },
+    function(next) {
+      async.eachLimit(names, 1000, function(name, done) {
+        new SimpleModel({ name : 'abc', lastname : 'abc', age : 25  }).save(done);
+      }, next);
+    }],
+    function(err) {
 
-    SimpleModel.find().exec(function(err, data) {
-      var time = [];
-      time[0] = new Date().getTime()/1000;
-      console.log(0, "START");
-      /* Generate automatic model for processing (A manual model may be used!) */
-      var model = mongoxlsx.buildDynamicModel(data);
+      SimpleModel.find().exec(function(err, data) {
+        var time = [];
+        time[0] = new Date().getTime()/1000;
+        console.log(0, "START");
+        /* Generate automatic model for processing (A manual model may be used!) */
+        var model = mongoxlsx.buildDynamicModel(data);
 
-      time[1] = new Date().getTime()/1000;
-      console.log(time[1]-time[0],"MODEL DONE");
-      /* Generate data for excel */
-      mongoxlsx.mongoData2Xlsx(data, model, function(err, data) {
+        time[1] = new Date().getTime()/1000;
+        console.log(time[1]-time[0],"MODEL DONE");
+        /* Generate data for excel */
+        mongoxlsx.mongoData2Xlsx(data, model, function(err, data) {
 
-        time[2] = new Date().getTime()/1000;
-        console.log(time[2]-time[1], "WRITING XLSX DONE");
-        /* Generate JSON from excel */
-        mongoxlsx.xlsx2MongoData(data.fullPath, model, function(err, json) {
-          time[3] = new Date().getTime()/1000;
-          console.log(time[3]-time[2], "READING AND PARSING XLSX DONE");
+          time[2] = new Date().getTime()/1000;
+          console.log(time[2]-time[1], "WRITING XLSX DONE");
+          /* Generate JSON from excel */
+          mongoxlsx.xlsx2MongoData(data.fullPath, model, function(err, json) {
+            time[3] = new Date().getTime()/1000;
+            console.log(time[3]-time[2], "READING AND PARSING XLSX DONE");
 
-          console.log(json.length);
-          console.log(json[0], json[json.length-1]);
+            console.log(json.length);
+            console.log(json[0], json[json.length-1]);
+          });
         });
       });
-    });
-  }
-);
-
+    }
+  );
 }
