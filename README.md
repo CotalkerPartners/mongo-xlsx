@@ -44,6 +44,28 @@ mongoXlsx.xlsx2MongoData("./file.xlsx", model, function(err, mongoData) {
 });
 ```
 
+| Name          | Email         |
+| ------------- | ------------- |
+| Eddie         | edward@mail   |
+| Nico          | nicolas@mail  |
+
+```javascript
+/* Read xlsx file without a model */
+/* The library will use the first row the key */
+var model = null;
+var xlsx  = './file.xlsx';
+
+mongoxlsx.xlsx2MongoData(xlsx, model, function(err, data) {
+  console.log(data);
+  /*
+  [{ Name: 'Eddie', Email: 'edward@mail' }, { Name: 'Nico', Email: 'nicolas@mail' }]  
+  */
+});
+
+```
+
+
+
 ## Instalation
 
 `npm install mongo-xlsx`
