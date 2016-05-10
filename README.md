@@ -12,6 +12,36 @@ The general data conversion flow:
 `file.xlsx` -> (convert data w/`xlsx2MongoData`) -> `MongoData` -> (save to MongoDB w/`mongoose.save`) -> `MongoDB`
 
 
+### mongoData2Xlsx
+```json
+[
+  { 
+    "name" : "eddie", 
+    "likes" : [ "video games", "ninjas" ] 
+  },
+  { 
+    "name" : "nico", 
+    "likes" : [ "nyc" ], 
+    "description" : { 
+      "mascot" : "dog" 
+    }
+  }
+]
+```
+converts to
+
+name | likes[0] | likes[1] | description[mascot]
+-----|----------| ---------| -----------------
+eddie| video games | ninjas | 
+nico | nyc   |    |   dog
+
+### xlsx2MongoData
+
+Reverses the previous example (table -> json array)
+
+## Screenshots
+Screenshots: spreedsheet <--> json
+
 ![alt tag](https://raw.github.com/moblox/mongo-xlsx/master/assets/sample.png)
 
 
