@@ -7,10 +7,10 @@ mongo-xlsx is a node.js utility module which provides tools that convert excel s
 
 The general data conversion flow:
 
-```
-MongoDB   -> (extract data with mongoose.find)  -> MongoData -> (convert with mongoData2Xlsx)        -> file.xlsx
-file.xlsx -> (convert data with xlsx2MongoData) -> MongoData -> (save to MongoDB with mongoose.save) -> MongoDB
-```
+`MongoDB`   -> (extract data w/`MongooseModel.find`)  -> `MongoData` -> (convert w/`mongoData2Xlsx`) -> `file.xlsx`
+
+`file.xlsx` -> (convert data w/`xlsx2MongoData`) -> `MongoData` -> (save to MongoDB w/`mongoose.save`) -> `MongoDB`
+
 
 ![alt tag](https://raw.github.com/moblox/mongo-xlsx/master/assets/sample.png)
 
@@ -140,3 +140,7 @@ Otherwise the mongoModel map will be used to build the JSON
 Converts Excel Data into Mongo Data.
 If mongoModel is null trys to use the file's header to build the JSON
 Otherwise the mongoModel map will be used to build the JSON
+
+
+## Roadmap
+[Github issue] (https://github.com/Moblox/mongo-xlsx/issues/5)
