@@ -140,37 +140,3 @@ Otherwise the mongoModel map will be used to build the JSON
 Converts Excel Data into Mongo Data.
 If mongoModel is null trys to use the file's header to build the JSON
 Otherwise the mongoModel map will be used to build the JSON
-
-## Roadmap
-
-- Fix performance issues
-- Fix date objects (Fixed: test@ test_time.js but test are more lax)
-- Add Model examples and tests (more model examples needed!)
-- Add negative test so that we can check the custom-deep-comparators
-- Add Mongoose import/export test (Support for ObjectIDs was added)
-
-## Known Limitations
-
-1. Not using modelMap to convert from excel to json
-2. May not work well with mixed types for the same key
-
-e.g. error1_test.json is passing but their may be unknown side effects. More test are still neededed.
-```json
-[{"a":1},{"a":["hello","world"]},{"a":{"b":true,"c":false}}]
-```
-
-3. Nested objects "first" element element may not be a numeric or string-numeric:
-(ECMA-262 does not specify enumeration order. The de facto standard is to match insertion order.)
-
-e.g., 
-```json
-  {
-    "0" : "Hello",
-    "a" : "world"
-  }
-```
-
-4. Very Slow :'(
-Some Performance Issues @ JSON.parse(JSON.stringify(x)) to make a copy and not modify original data (error1_test.json)
-
-5. nulls, empty cells, undefined hell 
